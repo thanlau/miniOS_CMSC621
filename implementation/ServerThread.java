@@ -17,6 +17,7 @@ public class ServerThread extends Thread
         String directoryName = PATH.concat("/"+user);
         String fileName = filename + ".txt";
         File directory = new File(directoryName);
+        String[] filetext = content.split("\\$\\%\\^");
 
         //If directory doesn't exist then it creates
         if (! directory.exists())
@@ -28,7 +29,12 @@ public class ServerThread extends Thread
         try{
             FileWriter fw = new FileWriter(file.getAbsoluteFile());
             BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(content);
+            for (int i = 0; i < filetext.length; i++)
+            {
+                bw.write(filetext[i]);
+                bw.newLine();
+            }
+            
             bw.close();
         }
         catch (IOException e)
@@ -52,9 +58,14 @@ public class ServerThread extends Thread
             try
             {
                 BufferedReader br = new BufferedReader(new FileReader(file));
-                String text = br.readLine();
+                String text;
+                String content = "";
+                while ((text=br.readLine()) != null)
+                {
+                    content = content + text + "$%^";
+                }
                 br.close();
-                return text;
+                return content;
             }
             catch(IOException e)
             {
@@ -100,7 +111,7 @@ public class ServerThread extends Thread
                 System.out.println(text);
                 String[] splited = text.split("\\s+");
                 String operation = splited[0];
-
+        
                 //If operation == 1 call Create File
                 if (operation.equals("1"))
                 {
