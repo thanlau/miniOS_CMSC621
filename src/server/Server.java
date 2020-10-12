@@ -39,15 +39,15 @@ public class Server {
 		 */
 	}
 	
-	@Override
-	public ReplicaLoc[] read(String fileName){
-		/**
-		 * @param fileName
-		 * @return primary replica of given file
-		 * check if the primary replica server is not available, then choose another primray replica for that file
-		 */
-		return ReplicaLoc[0];
-	}
+//	@Override
+//	public ReplicaLoc[] read(String fileName){
+//		/**
+//		 * @param fileName
+//		 * @return primary replica of given file
+//		 * check if the primary replica server is not available, then choose another primray replica for that file
+//		 */
+//		return ReplicaLoc[0];
+//	}
 	
 	private void assignNewPrimraryReplica(String fileName) {
 		/**
