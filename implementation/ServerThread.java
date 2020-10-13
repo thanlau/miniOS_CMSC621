@@ -4,7 +4,7 @@ import java.net.*;
 public class ServerThread extends Thread
 {
     private Socket socket;
-    private static String PATH = "F:/Courses/AOS/Project/dev/Directory";
+    private static String PATH = "..//Directory";
 
     public ServerThread(Socket socket)
     {
