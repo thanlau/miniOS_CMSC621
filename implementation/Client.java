@@ -1,8 +1,53 @@
 import java.net.*;
 import java.io.*;
+import java.util.Date;
 
 public class Client
 {
+    public static long ping(String ipaddr) throws UnknownHostException, IOException
+    {
+        InetAddress site = InetAddress.getByName(ipaddr);
+        Date start = new Date();
+        if (site.isReachable(1000))
+        {
+            Date end =new Date();
+            long ping =end.getTime() - start.getTime();
+            return ping;
+        }
+
+        return -100;
+    }
+
+    public String closest_server()
+    {
+        String PATH = "serverslist.txt";
+        File file = new File(PATH);
+        try
+        {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String text;
+            long minping = 10000;
+            String minaddr = "";
+            while ((text=br.readLine()) != null)
+            {
+                long p = ping(text);
+                if (p <= minping)
+                {
+                    minping = p;
+                    minaddr = text;
+                }
+            }
+            
+            br.close();
+            return minaddr;
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return "File Not Present";
+    }
+
     public String read_input() throws IOException
     {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -48,7 +93,6 @@ public class Client
                 if (text.charAt(0)=='1')
                 {
                     String content = "";
-                    String line="";
                     System.out.println("Enter File Text. To end type End");
                     content = this.read_input();
                     System.out.println(content);
@@ -83,9 +127,9 @@ public class Client
 
     public static void main(String[] args)
     {
-        String hostname = args[0];
-        int port = Integer.parseInt(args[1]);
+        int port = 5000;
         Client client = new Client();
+        String hostname = client.closest_server();
         client.start_client(hostname, port);
     }
 }
