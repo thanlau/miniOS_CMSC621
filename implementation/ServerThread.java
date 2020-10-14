@@ -110,7 +110,7 @@ public class ServerThread extends Thread
         file.getParentFile().mkdirs();
         file.createNewFile();   	
 	    try{
-	        FileWriter fw = new FileWriter(file);
+	        FileWriter fw = new FileWriter(file, true);
 	        BufferedWriter bw = new BufferedWriter(fw);
 	        for (int i = 0; i < filetext.length; i++)
 	         {
