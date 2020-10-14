@@ -14,7 +14,7 @@ public class Server
                 //Accept connection from Client
                 Socket socket = serverSocket.accept();
                 System.out.println("New client connected");
-                System.out.println(socket.getInetAddress());
+                System.out.println("Client Address : " + socket.getInetAddress());
 
                 // Creating a new thread for each Client connected
                 new ServerThread(socket).start();

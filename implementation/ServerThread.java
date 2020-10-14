@@ -85,14 +85,42 @@ public class ServerThread extends Thread
         String directoryName = PATH.concat("/"+user);
         String fileName = filename + ".txt";
         File file = new File(directoryName + "/" + fileName);
+
         //If file present then it deletes the file
-        if (file.delete())
+        if (file.exists())
         {
+            String tempName = "..//Deleted/" + user;
+            File directory = new File(tempName);
+            if (! directory.exists())
+                directory.mkdir();
+            file.renameTo(new File(tempName + "/"+file.getName()));
             return "File Deleted Successfully";
         }
-        return "File Could Not be Deleted";
+        else
+        {
+            return "File Not Present";
+        }
     }
     
+
+    //Function to Restore File
+    private String restore(String user, String filename)
+    {
+        String directoryName = PATH.concat("/"+user);
+        String fileName = filename + ".txt";
+        File file = new File("..//Deleted/" + user+"/"+filename + ".txt");
+        if (file.exists())
+        {
+            file.renameTo(new File(directoryName + "/" + fileName));
+            return "File Restored";
+        }
+        else
+        {
+            return "File Doesn't Exist";
+        }
+        
+    }
+
     //Function to Write File
     private String write(String user, String filename, String content) throws IOException{
     	String directoryName = PATH.concat("/"+user);
@@ -175,6 +203,12 @@ public class ServerThread extends Thread
                      output_text = this.write(x[1], x[2], x[3]);
                      System.out.println(output_text);
                      writer.println(output_text);
+                }
+                else if(operation.equals("5"))
+                {
+                    output_text = this.restore(splited[1],splited[2]);
+                    System.out.println(output_text);
+                    writer.println(output_text);
                 }
                 
             }

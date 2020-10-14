@@ -15,7 +15,7 @@ public class Client
             return ping;
         }
 
-        return -100;
+        return 1000;
     }
 
     public String closest_server()
@@ -31,7 +31,7 @@ public class Client
             while ((text=br.readLine()) != null)
             {
                 long p = ping(text);
-                if (p <= minping)
+                if (p <= minping && p != 1000)
                 {
                     minping = p;
                     minaddr = text;
@@ -81,6 +81,7 @@ public class Client
     {
         try (Socket socket = new Socket(hostname, port))
         {
+            System.out.println("Connected to Server: " + hostname);
             OutputStream output = socket.getOutputStream();
             PrintWriter writer = new PrintWriter(output, true);
             Console console = System.console();
@@ -89,7 +90,7 @@ public class Client
             // To close connection type "Over"
             while (!text.equals("Over"))
             {
-                text = console.readLine("Enter \n 1: To Create File (1 <user> <filename>)\n 2: To Read File (2 <user> <filename>) \n 3: To Delete File (3 <user> <filename>)\n 4: To Write File (4 <user> <filename>)\n\n");
+                text = console.readLine("Enter \n 1: To Create File (1 <user> <filename>)\n 2: To Read File (2 <user> <filename>) \n 3: To Delete File (3 <user> <filename>)\n 4: To Write File (4 <user> <filename>)\n 5: To Restore File (5 <user> <filename>)\n\n");
 
                 if (text.charAt(0)=='1' || text.charAt(0) =='4')
                 {
