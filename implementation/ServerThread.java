@@ -92,6 +92,41 @@ public class ServerThread extends Thread
         }
         return "File Could Not be Deleted";
     }
+    
+    //Function to Write File
+    private String write(String user, String filename, String content) throws IOException{
+    	String directoryName = PATH.concat("/"+user);
+        String fileName = filename + ".txt";
+        File directory = new File(directoryName);
+        String[] filetext = content.split("\\$\\%\\^");
+
+        //If directory doesn't exist then it creates
+        if (! directory.exists())
+        {
+            directory.mkdir();
+        }
+        
+        File file = new File(directoryName + "/" + fileName);
+        file.getParentFile().mkdirs();
+        file.createNewFile();   	
+	    try{
+	        FileWriter fw = new FileWriter(file);
+	        BufferedWriter bw = new BufferedWriter(fw);
+	        for (int i = 0; i < filetext.length; i++)
+	         {
+	            bw.write(filetext[i]);
+	            bw.newLine();
+	         }
+	            
+	            bw.close();
+	        }
+	    catch (IOException e)
+	        {
+	            e.printStackTrace();
+	        }
+
+        return "File Wrote Successfully";
+    }
 
     public void run()
     {
@@ -134,6 +169,12 @@ public class ServerThread extends Thread
                     output_text = this.delete(splited[1],splited[2]);
                     System.out.println(output_text);
                     writer.println(output_text);
+                }
+                else if(operation.equals("4")) {
+                	 String[] x = text.split("\\s+",4);
+                     output_text = this.write(x[1], x[2], x[3]);
+                     System.out.println(output_text);
+                     writer.println(output_text);
                 }
                 
             }
