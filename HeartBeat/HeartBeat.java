@@ -25,7 +25,7 @@ public class HeartBeat
 
     public static void writeServers(ArrayList<String> ip) throws IOException
     {
-        String PATH = "Available Servers.txt";
+        String PATH = "AvailableServers.txt";
         File file = new File(PATH);
         FileWriter fw = new FileWriter(file.getAbsoluteFile());
         BufferedWriter bw = new BufferedWriter(fw);
