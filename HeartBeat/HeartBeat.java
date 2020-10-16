@@ -15,7 +15,7 @@ public class HeartBeat
         String currentIp =  findip();
         while ((text=br.readLine()) != null)
         {
-            if (text.equals(currentIp))
+            if (!(text.equals(currentIp)))
             {
                 ip.add(text);
             }
