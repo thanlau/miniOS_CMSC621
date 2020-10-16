@@ -18,7 +18,7 @@ public class HeartBeat
         {
             if (text != currentIp)
             {
-                System.out.println(text+"defg");
+                System.out.println("172.31.27.138" == currentIp);
                 ip.add(text);
             }
         }
