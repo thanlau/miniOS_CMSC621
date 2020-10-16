@@ -13,7 +13,7 @@ public class HeartBeat
         ArrayList<String> ip = new ArrayList<String>();
         String text;
         String currentIp =  findip();
-        System.out.println(currentIp);
+        System.out.println(currentIp+"abcd");
         while ((text=br.readLine()) != null)
         {
             if (text != currentIp)
