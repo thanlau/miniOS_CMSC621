@@ -18,7 +18,7 @@ public class HeartBeat
         {
             if (text != currentIp)
             {
-                System.out.println(text);
+                System.out.println(text==currentIp);
                 ip.add(text);
             }
         }
