@@ -1,41 +1,78 @@
 import java.io.*;
 import java.net.*;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class HeartBeat
 {
-    public static void sendPingRequest(String ipAddress) throws UnknownHostException, IOException
+    public static ArrayList<String> readServers() throws IOException
+    {
+        String PATH = "servers.txt";
+        File file = new File(PATH);
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        ArrayList<String> ip = new ArrayList<String>();
+        String text;
+        String currentIp =  findip();
+        while ((text=br.readLine()) != null)
+        {
+            if (text != currentIp)
+                ip.add(text);
+        }
+        br.close();
+        return ip;
+        
+    }
+
+    public static void writeServers(ArrayList<String> ip) throws IOException
+    {
+        String PATH = "Available Servers.txt";
+        File file = new File(PATH);
+        FileWriter fw = new FileWriter(file.getAbsoluteFile());
+        BufferedWriter bw = new BufferedWriter(fw);
+        for (int i = 0; i < ip.size(); i++)
+        {
+            bw.write(ip.get(i));
+            bw.newLine();
+        }
+        bw.close();
+    }    
+
+    public static boolean sendPingRequest(String ipAddress) throws UnknownHostException, IOException
     {
         InetAddress system = InetAddress.getByName(ipAddress);
         System.out.println("Sending Ping Request to " + ipAddress);
-        Date start = new Date();
+        
         if (system.isReachable(5000))
         {
-            System.out.println("Host is reachable");
-            Date end =new Date();
-            System.out.println(end.getTime() - start.getTime());
+            return true;
         }
         else
         {
-            System.out.println("Sorry ! We can't reach to this host");
+            return false;
         }
     }
 
-    public static void findip() throws UnknownHostException
+    public static String findip() throws UnknownHostException
     {
         InetAddress inetAddress = InetAddress.getLocalHost();
-        System.out.println("IP Address:- " + inetAddress.getHostAddress());
-        System.out.println("Host Name:- " + inetAddress.getHostName());
+        //System.out.println("IP Address:- " + inetAddress.getHostAddress());
+        //System.out.println("Host Name:- " + inetAddress.getHostName());
+        return inetAddress.getHostAddress();
     }
 
     public static void main(String []args) throws IOException, InterruptedException
     {
         while (true)
         {
-            sendPingRequest("54.161.145.16");
-            sendPingRequest("54.165.226.147");
-            findip();
+            ArrayList<String> ip = readServers();
+            ArrayList<String> available = new ArrayList<String>();
+            for (int i = 0; i < ip.size(); i++)
+            {
+                if (sendPingRequest(ip.get(i)) == true)
+                    available.add(ip.get(i));
+            }
+            writeServers(available);
+            System.out.println("test");
             TimeUnit.SECONDS.sleep(5);
         }
     }
