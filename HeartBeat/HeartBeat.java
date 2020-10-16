@@ -17,7 +17,10 @@ public class HeartBeat
         while ((text=br.readLine()) != null)
         {
             if (text != currentIp)
+            {
+                System.out.println(text);
                 ip.add(text);
+            }
         }
         br.close();
         return ip;
