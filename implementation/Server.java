@@ -8,6 +8,7 @@ public class Server
     {
         try (ServerSocket serverSocket = new ServerSocket(port))
         {
+            new HeartBeat().start();
             System.out.println("Server is listening on port " + port);
             while (true)
             {
