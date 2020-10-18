@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.*;
+import java.util.logging.*;
 
 public class ServerThread extends Thread
 {
@@ -11,8 +12,24 @@ public class ServerThread extends Thread
         this.socket = socket;
     }
 
+    //Function to write Logs
+    private static void log(String user, String filename, String operation, String message) throws IOException, SecurityException
+    {
+        String directoryName = PATH.concat("/"+user);
+        File directory = new File(directoryName);
+        if(! directory.exists())
+            directory.mkdir();
+        boolean append = true;
+        FileHandler handler = new FileHandler(directoryName + "/"+ user + ".log", append);
+        Logger logger = Logger.getLogger("UserLog");
+        logger.addHandler(handler);
+        logger.setUseParentHandlers(false);
+        logger.info(operation + "    " + filename + "    " +message);
+
+    }
+
     // Function to Create File
-    private String create(String user, String filename, String content)
+    private String create(String user, String filename, String content) throws IOException
     {
         String directoryName = PATH.concat("/"+user);
         String fileName = filename + ".txt";
@@ -41,12 +58,12 @@ public class ServerThread extends Thread
         {
             e.printStackTrace();
         }
-
+        log(user,filename,"Create","File Created Successfully");
         return "File Created Successfully";
     }
 
     // Function to Read File
-    private String read(String user, String filename)
+    private String read(String user, String filename) throws IOException
     {
         String directoryName = PATH.concat("/"+user);
         String fileName = filename + ".txt";
@@ -65,6 +82,7 @@ public class ServerThread extends Thread
                     content = content + text + "$%^";
                 }
                 br.close();
+                log(user,filename,"Read","File Read Successfully");
                 return content;
             }
             catch(IOException e)
@@ -74,13 +92,14 @@ public class ServerThread extends Thread
         }
         else
         {
+            log(user,filename,"Read","File Not Present");
             return "File Not Present";
         }
         return "File Not Present";
     }
 
     // Function to Delete File
-    private String delete(String user, String filename)
+    private String delete(String user, String filename) throws IOException
     {
         String directoryName = PATH.concat("/"+user);
         String fileName = filename + ".txt";
@@ -94,17 +113,19 @@ public class ServerThread extends Thread
             if (! directory.exists())
                 directory.mkdir();
             file.renameTo(new File(tempName + "/"+file.getName()));
+            log(user,filename,"Delete","File Deleted Successfully");
             return "File Deleted Successfully";
         }
         else
         {
+            log(user,filename,"Delete","File Not Present");
             return "File Not Present";
         }
     }
     
 
     //Function to Restore File
-    private String restore(String user, String filename)
+    private String restore(String user, String filename) throws IOException
     {
         String directoryName = PATH.concat("/"+user);
         String fileName = filename + ".txt";
@@ -112,10 +133,12 @@ public class ServerThread extends Thread
         if (file.exists())
         {
             file.renameTo(new File(directoryName + "/" + fileName));
+            log(user,filename,"Restore","File Restored");
             return "File Restored";
         }
         else
         {
+            log(user,filename,"Restore","File Doesn't Exist");
             return "File Doesn't Exist";
         }
         
@@ -198,12 +221,14 @@ public class ServerThread extends Thread
                     System.out.println(output_text);
                     writer.println(output_text);
                 }
+                //If operation == 4 call Write/Append File
                 else if(operation.equals("4")) {
                 	 String[] x = text.split("\\s+",4);
                      output_text = this.write(x[1], x[2], x[3]);
                      System.out.println(output_text);
                      writer.println(output_text);
                 }
+                //If operation == 5 call Restore File
                 else if(operation.equals("5"))
                 {
                     output_text = this.restore(splited[1],splited[2]);
