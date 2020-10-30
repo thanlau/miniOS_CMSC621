@@ -11,6 +11,28 @@ public class ServerThread extends Thread
     {
         this.socket = socket;
     }
+    //function to record write opearation log
+    public static synchronized void log(String command, String transactionID, String sequenceNumber, String data) 
+    {
+	assert(file != null);
+		
+	String message = command + " " + transactionID + " " + sequenceNumber + " " + data.length() + "\n" + data; 
+		
+	try {
+		file.append(message);
+	} catch (FileNotFoundException e) {
+		System.out.println("File not found error occured when adding \"" + message + "\" to recovery log");
+	} catch (IOException e) {
+		System.out.println("IO error occured while adding \"" + message + "\" to recovery log");
+	}
+    }
+    //function to delete log
+    public static void deleteLog() {
+	String directoryName = PATH.concat("/"+user);
+	File logFile = new File(directoryName + file.getFileName());
+	logFile.delete();
+		
+    }
 
     //Function to write Logs
     private static void log(String user, String filename, String operation, String message) throws IOException, SecurityException
