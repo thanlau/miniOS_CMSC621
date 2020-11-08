@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-//package baseInterface;
-=======
->>>>>>> 80fb8a592482cad07744ff08673243b7300fe553
 
 import java.io.BufferedWriter;
 import java.io.File;
