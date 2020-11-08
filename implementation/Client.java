@@ -192,7 +192,7 @@ public class Client
     {
         int port = 5000;
         Client client = new Client();
-        //String hostname = client.closest_server();
-        client.start_client("127.0.0.1", port);
+        String hostname = client.closest_server();
+        client.start_client(hostname, port);
     }
 }
