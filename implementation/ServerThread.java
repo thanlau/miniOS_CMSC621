@@ -6,36 +6,14 @@ public class ServerThread extends Thread
 {
     private Socket socket;
     private static String PATH = "..//Directory";
-
+    public static Lease lease;
     public ServerThread(Socket socket)
     {
         this.socket = socket;
     }
-    //function to record write opearation log
-    public static synchronized void log(String command, String transactionID, String sequenceNumber, String data) 
-    {
-	assert(file != null);
-		
-	String message = command + " " + transactionID + " " + sequenceNumber + " " + data.length() + "\n" + data; 
-		
-	try {
-		file.append(message);
-	} catch (FileNotFoundException e) {
-		System.out.println("File not found error occured when adding \"" + message + "\" to recovery log");
-	} catch (IOException e) {
-		System.out.println("IO error occured while adding \"" + message + "\" to recovery log");
-	}
-    }
-    //function to delete log
-    public static void deleteLog() {
-	String directoryName = PATH.concat("/"+user);
-	File logFile = new File(directoryName + file.getFileName());
-	logFile.delete();
-		
-    }
 
     //Function to write Logs
-    private static void log(String user, String filename, String operation, String message) throws IOException, SecurityException
+    private synchronized static void log(String user, String filename, String operation, String message) throws IOException, SecurityException
     {
         String directoryName = PATH.concat("/"+user);
         File directory = new File(directoryName);
@@ -65,6 +43,11 @@ public class ServerThread extends Thread
         }
         //Creating File
         File file = new File(directoryName + "/" + fileName);
+        if (file.exists())
+        {
+            log(user,filename,"Create","File Already Exists.");
+            return "File Already Exists.To update content use write operation";
+        }
         try{
             FileWriter fw = new FileWriter(file.getAbsoluteFile());
             BufferedWriter bw = new BufferedWriter(fw);
@@ -166,8 +149,8 @@ public class ServerThread extends Thread
         
     }
 
-    //Function to Write File
-    private String write(String user, String filename, String content) throws IOException{
+    //Function to append File
+    private String append(String user, String filename, String content) throws IOException{
     	String directoryName = PATH.concat("/"+user);
         String fileName = filename + ".txt";
         File directory = new File(directoryName);
@@ -180,6 +163,10 @@ public class ServerThread extends Thread
         }
         
         File file = new File(directoryName + "/" + fileName);
+        if(!(lock(user,filename)))
+        {
+            return "Locked";
+        }
         file.getParentFile().mkdirs();
         file.createNewFile();   	
 	    try{
@@ -201,6 +188,127 @@ public class ServerThread extends Thread
         return "File Wrote Successfully";
     }
 
+
+    private String write(String user, String filename, String content) throws IOException
+    {
+        String directoryName = PATH.concat("/"+user);
+        String fileName = filename + ".txt";
+        String[] filetext = content.split("\\$\\%\\^");
+
+        //Creating File
+        File file = new File(directoryName + "/" + fileName);
+
+        if ( !(lease.isAlive()))
+            return "Lease Period Over. Please Request for Update Again";
+        try{
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            for (int i = 0; i < filetext.length; i++)
+            {
+                bw.write(filetext[i]);
+                bw.newLine();
+            }
+            
+            bw.close();
+            //unlock the file after write
+            unlock(user, filename);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        log(user,filename,"Write","File Updated Successfully");
+        //call replica
+        return "File Updated Successfully";
+    }
+
+    // Function to Read File
+    private String readforwrite(String user, String filename) throws IOException
+    {
+         String directoryName = PATH.concat("/"+user);
+         String fileName = filename + ".txt";
+         File file = new File(directoryName + "/" + fileName);
+ 
+         //If File exists then it reads File else returns File Not Present
+         if (file.exists())
+         {
+            try
+            {
+                //check if file is locked
+                if(!(lock(user,filename)))
+                {
+                    return "Locked";
+                }
+
+                BufferedReader br = new BufferedReader(new FileReader(file));
+                String text;
+                String content = "";
+                while ((text=br.readLine()) != null)
+                {
+                    content = content + text + "$%^";
+                }
+                br.close();
+                log(user,filename,"Read","File Read Successfully");
+                return content;
+             }
+            catch(IOException e)
+            {
+                e.printStackTrace();
+            }
+         }
+         else
+        {
+            log(user,filename,"Read","File Not Present");
+            return "File Not Present";
+        }
+        return "File Not Present";
+    }
+
+     //Function to Lock File
+     private synchronized static boolean lock(String user, String filename) throws IOException
+    {
+        String directoryName = PATH.concat("/"+user);
+        String fileName = filename + ".lck";
+        File file = new File(directoryName + "/" + fileName);
+        Boolean lock;
+        //Checks if file is locked by some other user
+        if (file.exists())
+        {
+            lock = false;
+            log(user,filename,"Lock","File Locked");
+        }
+        //Else create lock
+        else
+        {
+            file.createNewFile();
+            lock = true;
+            //Create a timer thread of 10 mins (Lease Period)
+            lease = new Lease(user,filename);
+            lease.start();
+            log(user,filename,"Lock","Lock Successful");
+        }
+        return lock;
+    }
+
+    //Function to Unlock File
+    private synchronized static boolean unlock(String user, String filename) throws IOException
+    {
+        String directoryName = PATH.concat("/"+user);
+        String fileName = filename + ".lck";
+        File file = new File(directoryName + "/" + fileName);
+        Boolean unlock=false;
+        
+        if (file.exists())
+        {
+            file.delete();
+            //Destroy timer thread of 10 mins (Lease Period Removal)
+            lease.shutdown();
+            unlock = true;
+            log(user,filename,"Unlock","Unlock Successful");
+        }
+        return unlock;
+    }
+
     public void run()
     {
         try
@@ -216,7 +324,7 @@ public class ServerThread extends Thread
             {
                 String output_text;
                 text = reader.readLine();
-                System.out.println(text);
+                //System.out.println(text);
                 String[] splited = text.split("\\s+");
                 String operation = splited[0];
         
@@ -225,7 +333,7 @@ public class ServerThread extends Thread
                 {
                     String[] x = text.split("\\s+",4);
                     output_text = this.create(x[1], x[2], x[3]);
-                    System.out.println(output_text);
+                    //System.out.println(output_text);
                     writer.println(output_text);
                 }
 
@@ -240,22 +348,41 @@ public class ServerThread extends Thread
                 else if (operation.equals("3"))
                 {
                     output_text = this.delete(splited[1],splited[2]);
-                    System.out.println(output_text);
+                    //System.out.println(output_text);
                     writer.println(output_text);
                 }
-                //If operation == 4 call Write/Append File
+                //If operation == 4 call Append File
                 else if(operation.equals("4")) {
                 	 String[] x = text.split("\\s+",4);
-                     output_text = this.write(x[1], x[2], x[3]);
-                     System.out.println(output_text);
+                     output_text = this.append(x[1], x[2], x[3]);
+                     //System.out.println(output_text);
                      writer.println(output_text);
                 }
                 //If operation == 5 call Restore File
                 else if(operation.equals("5"))
                 {
                     output_text = this.restore(splited[1],splited[2]);
-                    System.out.println(output_text);
+                    //System.out.println(output_text);
                     writer.println(output_text);
+                }
+                else if(operation.equals("6"))
+                {
+                    String[] x = text.split("\\s+",4);
+                    output_text = this.write(x[1], x[2], x[3]);
+                    //System.out.println(output_text);
+                    writer.println(output_text);
+                }
+                else if(operation.equals("9"))
+                {
+                    output_text = this.readforwrite(splited[1],splited[2]);
+                    //output_text = "Locked";
+                    //System.out.println(output_text);
+                    writer.println(output_text);
+                }
+                else if(operation.equals("Over"))
+                {
+                    //System.out.println("Connection Closed with Client : " + socket.getInetAddress());
+                    writer.println("Connection Closed");
                 }
                 
             }
