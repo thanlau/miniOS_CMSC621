@@ -1,4 +1,3 @@
-
 import java.io.*;
 import java.net.*;
 import java.rmi.RemoteException;
@@ -11,7 +10,7 @@ import java.util.logging.*;
 import java.rmi.registry.LocateRegistry; 
 import java.rmi.registry.Registry;  
 
-import baseInterface.ServerReplicaServerInterface;
+//import ServerReplicaServerInterface;
 
 public class ServerThread extends Thread
 {

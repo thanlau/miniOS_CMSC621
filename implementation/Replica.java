@@ -1,4 +1,4 @@
-package baseInterface;
+//package baseInterface;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -6,7 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.rmi.RemoteException;
 
-import server.Lease;
+//import server.Lease;
 
 public class Replica implements ServerReplicaServerInterface{
 	private static String PATH = "..//Directory";
