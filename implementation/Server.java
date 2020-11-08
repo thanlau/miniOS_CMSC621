@@ -10,9 +10,7 @@ import java.util.ArrayList;
 //import baseInterface.Replica;
 //import baseInterface.ServerReplicaServerInterface;
 //import client.HeartBeat;
-import Replica;
-import ServerReplicaServerInterface;
-import client.HeartBeat;
+
 
 
 public class Server extends Replica
