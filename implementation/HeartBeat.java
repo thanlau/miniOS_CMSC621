@@ -76,7 +76,7 @@ public class HeartBeat extends Thread
                         available.add(ip.get(i));
                 }
                 writeServers(available);
-                System.out.println("test");
+                
                 TimeUnit.SECONDS.sleep(5);
             }
             catch (Exception ex)
