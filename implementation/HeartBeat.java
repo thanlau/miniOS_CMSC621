@@ -42,7 +42,7 @@ public class HeartBeat extends Thread
     public static boolean sendPingRequest(String ipAddress) throws UnknownHostException, IOException
     {
         InetAddress system = InetAddress.getByName(ipAddress);
-        System.out.println("Sending Ping Request to " + ipAddress);
+        //System.out.println("Sending Ping Request to " + ipAddress);
         
         if (system.isReachable(5000))
         {
