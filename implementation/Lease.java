@@ -60,7 +60,7 @@ public class Lease extends Thread
                 Thread.sleep(30000);
                 if (blinker != lease)
                     break;
-                //System.out.println("Timer Working");
+                System.out.println("Timer Working");
                 unlock(user,filename);
                 break;
 

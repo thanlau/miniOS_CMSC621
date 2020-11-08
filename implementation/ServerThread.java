@@ -1,12 +1,25 @@
+
 import java.io.*;
 import java.net.*;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 import java.util.logging.*;
+import java.rmi.registry.LocateRegistry; 
+import java.rmi.registry.Registry;  
+
+import baseInterface.ServerReplicaServerInterface;
 
 public class ServerThread extends Thread
 {
     private Socket socket;
     private static String PATH = "..//Directory";
     public static Lease lease;
+	private Map<String,	 List<ServerReplicaServerInterface> > filesReplicaMap; //replicas where files that this replica is its master are replicated  
+	private ArrayList<String> replicaList;
     public ServerThread(Socket socket)
     {
         this.socket = socket;
@@ -219,6 +232,24 @@ public class ServerThread extends Thread
         }
         log(user,filename,"Write","File Updated Successfully");
         //call replica
+        try {  
+	         // Getting the registry 
+	    	 ArrayList<String> replicaIP = readServers();
+	         Registry registry = LocateRegistry.getRegistry(null); 
+	    
+	         // Looking up the registry for the remote object 
+	         for(int i = 0; i < replicaIP.size(); i++) {
+		         ServerReplicaServerInterface stub = (ServerReplicaServerInterface) registry.lookup("Replica"+i); 
+		    
+		         // Calling the remote method using the obtained object 
+		         stub.updateFile(user, fileName, filetext); 
+	         }
+	         
+	         // System.out.println("Remote method invoked"); 
+	      } catch (Exception e) {
+	         System.err.println("Client exception: " + e.toString()); 
+	         e.printStackTrace(); 
+	      } 
         return "File Updated Successfully";
     }
 
@@ -395,4 +426,21 @@ public class ServerThread extends Thread
             ex.printStackTrace();
         }
     }
+
+    public static ArrayList<String> readServers() throws IOException
+    {
+        String PATH = "serverslist.txt";
+        File file = new File(PATH);
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        ArrayList<String> ip = new ArrayList<String>();
+        String text;
+        while ((text=br.readLine()) != null)
+        {
+            ip.add(text);
+        }
+        br.close();
+        return ip;
+        
+    }
+	
 }

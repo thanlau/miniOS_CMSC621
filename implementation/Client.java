@@ -151,7 +151,7 @@ public class Client
                     if (text.charAt(0)=='9' || text.charAt(0)=='2')
                     {
                         this.read_output(server_output);
-                        notepad();
+//                        notepad();
 
                     }
                     else
