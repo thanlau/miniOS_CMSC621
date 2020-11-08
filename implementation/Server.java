@@ -58,7 +58,7 @@ public class Server extends Replica
 		try { 
 	         // Instantiating the implementation class 
 			for(int i = 0; i < replicaIP.size(); i++) {
-//				System.setProperty("java.rmi.server.hostname", replicaIP.get(i));
+				System.setProperty("java.rmi.server.hostname", replicaIP.get(i));
 				Replica obj = new Replica(); 
 	
 		    
