@@ -6,9 +6,15 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
+<<<<<<< HEAD
 //import baseInterface.Replica;
 //import baseInterface.ServerReplicaServerInterface;
 //import client.HeartBeat;
+=======
+import Replica;
+import ServerReplicaServerInterface;
+import client.HeartBeat;
+>>>>>>> 80fb8a592482cad07744ff08673243b7300fe553
 
 public class Server extends Replica
 {
