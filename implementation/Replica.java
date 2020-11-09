@@ -22,8 +22,8 @@ public class Replica implements ServerReplicaServerInterface{
 		        //Creating File
 		        File file = new File(directoryName + "/" + fileName);
 
-		        if ( !(lease.isAlive()))
-		            return false;
+// 		        if ( !(lease.isAlive()))
+// 		            return false;
 		        try{
 		            FileWriter fw = new FileWriter(file.getAbsoluteFile());
 		            BufferedWriter bw = new BufferedWriter(fw);
