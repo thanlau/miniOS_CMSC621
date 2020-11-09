@@ -15,6 +15,7 @@ public class Replica implements ServerReplicaServerInterface{
 	@Override
 	public boolean updateFile(String user, String filename, String[] content) throws RemoteException, IOException {
 		// TODO Auto-generated method stub
+				System.out.println("Hello from Update Replica");
 				String directoryName = PATH.concat("/"+user);
 		        String fileName = filename + ".txt";
 		        //String[] filetext = content.split("\\$\\%\\^");
@@ -22,8 +23,8 @@ public class Replica implements ServerReplicaServerInterface{
 		        //Creating File
 		        File file = new File(directoryName + "/" + fileName);
 
-		        if ( !(lease.isAlive()))
-		            return false;
+		        //if ( !(lease.isAlive()))
+		            //return false;
 		        try{
 		            FileWriter fw = new FileWriter(file.getAbsoluteFile());
 		            BufferedWriter bw = new BufferedWriter(fw);
@@ -35,7 +36,7 @@ public class Replica implements ServerReplicaServerInterface{
 		            
 		            bw.close();
 		            //unlock the file after write
-		            unlock(user, filename);
+		            //unlock(user, filename);
 		        }
 		        catch (IOException e)
 		        {
