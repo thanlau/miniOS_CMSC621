@@ -207,6 +207,7 @@ public class ServerThread extends Thread
         String directoryName = PATH.concat("/"+user);
         String fileName = filename + ".txt";
         String[] filetext = content.split("\\$\\%\\^");
+	int port = 50000;
 
         //Creating File
         File file = new File(directoryName + "/" + fileName);
@@ -239,7 +240,7 @@ public class ServerThread extends Thread
 	    
 	         // Looking up the registry for the remote object 
 	         for(int i = 0; i < replicaIP.size(); i++) {
-	        	 Registry registry = LocateRegistry.getRegistry(replicaIP.get(i), 8000); 
+	        	 Registry registry = LocateRegistry.getRegistry(replicaIP.get(i), port+i); 
 		         ServerReplicaServerInterface replica = (ServerReplicaServerInterface) registry.lookup("Replica"+i); 
 		    
 		         // Calling the remote method using the obtained object 
