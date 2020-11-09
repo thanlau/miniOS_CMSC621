@@ -239,13 +239,17 @@ public class ServerThread extends Thread
 	        
 	    
 	         // Looking up the registry for the remote object 
-	         for(int i = 0; i < replicaIP.size(); i++) {
-		 			System.setProperty("java.rmi.server.hostname", replicaIP.get(i));
+	          for(int i = 0; i < replicaIP.size(); i++) {
+	        	 System.setProperty("java.rmi.server.hostname", replicaIP.get(i));
 	        	 Registry registry = LocateRegistry.getRegistry(replicaIP.get(i), port+i); 
 		         ServerReplicaServerInterface replica = (ServerReplicaServerInterface) registry.lookup("Replica"+i); 
 		    
 		         // Calling the remote method using the obtained object 
-		         replica.updateFile(user, fileName, filetext); 
+		        boolean success = replica.updateFile(user, fileName, content); 
+		        if(success = false) {
+		        	System.out.println("write err happens at" + " replica" + i);
+		        }
+		        System.out.println("write success at" + " replica" + i);
 	         }
 	         
 	         // System.out.println("Remote method invoked"); 
