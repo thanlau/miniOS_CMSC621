@@ -17,7 +17,6 @@ public interface ServerReplicaServerInterface extends Remote{
 	 * @throws IOException
 	 * @throws RemoteException
 	 */
-    public boolean updateFile(String user, String filename, String[] content) throws RemoteException, IOException;
-
+ public boolean updateFile(String user, String filename, String content) throws RemoteException, IOException;
 
 }
