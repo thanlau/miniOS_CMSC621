@@ -62,7 +62,7 @@ public class Server extends Replica
 				ServerReplicaServerInterface stub = (ServerReplicaServerInterface) UnicastRemoteObject.exportObject(replica,0);  
 		         
 		         // Binding the remote object (stub) in the registry 
-		        Registry registry = LocateRegistry.createRegistry(port); 
+		        Registry registry = LocateRegistry.getRegistry(port); 
 		        System.out.println("register replica" + i);
 		         
 		        registry.rebind("Replica"+i, stub);  
