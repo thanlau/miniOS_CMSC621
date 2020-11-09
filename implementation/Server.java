@@ -56,6 +56,7 @@ public class Server extends Replica
 		try { 
 	         // Instantiating the implementation class 
 			for(int i = 0; i < replicaIP.size(); i++) {
+			System.setProperty("java.rmi.server.hostname", replicaIP.get(i));
 				ServerReplicaServerInterface replica = new Replica(); 
 		    
 		         // Exporting the object of implementation class  
