@@ -1,3 +1,5 @@
+
+
 import java.io.*;
 import java.net.*;
 import java.rmi.RemoteException;
@@ -10,7 +12,6 @@ import java.util.logging.*;
 import java.rmi.registry.LocateRegistry; 
 import java.rmi.registry.Registry;  
 
-//import ServerReplicaServerInterface;
 
 public class ServerThread extends Thread
 {
@@ -234,14 +235,15 @@ public class ServerThread extends Thread
         try {  
 	         // Getting the registry 
 	    	 ArrayList<String> replicaIP = readServers();
-	         Registry registry = LocateRegistry.getRegistry(null); 
+	        
 	    
 	         // Looking up the registry for the remote object 
 	         for(int i = 0; i < replicaIP.size(); i++) {
-		         ServerReplicaServerInterface stub = (ServerReplicaServerInterface) registry.lookup("Replica"+i); 
+	        	 Registry registry = LocateRegistry.getRegistry(replicaIP.get(i), 8000); 
+		         ServerReplicaServerInterface replica = (ServerReplicaServerInterface) registry.lookup("Replica"+i); 
 		    
 		         // Calling the remote method using the obtained object 
-		         stub.updateFile(user, fileName, filetext); 
+		         replica.updateFile(user, fileName, filetext); 
 	         }
 	         
 	         // System.out.println("Remote method invoked"); 
