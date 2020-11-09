@@ -13,12 +13,12 @@ public class Replica implements ServerReplicaServerInterface{
 	
 
 	@Override
-	public boolean updateFile(String user, String filename, String[] content) throws RemoteException, IOException {
+	public boolean updateFile(String user, String filename, String content) throws RemoteException, IOException {
 		// TODO Auto-generated method stub
 				System.out.println("Hello from Update Replica");
 				String directoryName = PATH.concat("/"+user);
 		        String fileName = filename + ".txt";
-		        //String[] filetext = content.split("\\$\\%\\^");
+		        String[] filetext = content.split("\\$\\%\\^");
 
 		        //Creating File
 		        File file = new File(directoryName + "/" + fileName);
