@@ -39,9 +39,10 @@ public class Server extends Replica
         Server server = new Server();
 
         //The port number is 5000
-        server.start_server(5000);
+        
         try {
 			bindRMI();
+			server.start_server(5000);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -51,7 +52,7 @@ public class Server extends Replica
     public static void bindRMI() throws IOException {
 		String replicaName = "";
 		ArrayList<String> replicaIP = readServers();
-		int port = 5000;
+		int port = 50000;
 		try { 
 	         // Instantiating the implementation class 
 			for(int i = 0; i < replicaIP.size(); i++) {
@@ -62,7 +63,7 @@ public class Server extends Replica
 				ServerReplicaServerInterface stub = (ServerReplicaServerInterface) UnicastRemoteObject.exportObject(replica,0);  
 		         
 		         // Binding the remote object (stub) in the registry 
-		        Registry registry = LocateRegistry.getRegistry(port); 
+		        Registry registry = LocateRegistry.createRegistry(port+i); 
 		        System.out.println("register replica" + i);
 		         
 		        registry.rebind("Replica"+i, stub);  
