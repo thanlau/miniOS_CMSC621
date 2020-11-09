@@ -1,17 +1,11 @@
 
+
 import java.io.*;
 import java.net.*;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-
-
-//import baseInterface.Replica;
-//import baseInterface.ServerReplicaServerInterface;
-//import client.HeartBeat;
-
-
 
 public class Server extends Replica
 {
@@ -61,18 +55,17 @@ public class Server extends Replica
 		try { 
 	         // Instantiating the implementation class 
 			for(int i = 0; i < replicaIP.size(); i++) {
-				System.setProperty("java.rmi.server.hostname", replicaIP.get(i));
-				Replica obj = new Replica(); 
-	
+				ServerReplicaServerInterface replica = new Replica(); 
 		    
 		         // Exporting the object of implementation class  
 		         // (here we are exporting the remote object to the stub) 
-				ServerReplicaServerInterface stub = (ServerReplicaServerInterface) UnicastRemoteObject.exportObject(obj, 0);  
+				ServerReplicaServerInterface stub = (ServerReplicaServerInterface) UnicastRemoteObject.exportObject(replica,0);  
 		         
 		         // Binding the remote object (stub) in the registry 
-		        Registry registry = LocateRegistry.getRegistry(replicaIP.get(i), port); 
+		        Registry registry = LocateRegistry.createRegistry(port); 
+		        System.out.println("register replica" + i);
 		         
-		        registry.bind("Replica"+i, stub);  
+		        registry.rebind("Replica"+i, stub);  
 			}
 	         System.err.println("Server ready"); 
 	      } catch (Exception e) { 
