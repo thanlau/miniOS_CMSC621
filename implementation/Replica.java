@@ -33,9 +33,9 @@ public class Replica implements ServerReplicaServerInterface{
 		        try{
 		            FileWriter fw = new FileWriter(file.getAbsoluteFile());
 		            BufferedWriter bw = new BufferedWriter(fw);
-		            for (int i = 0; i < content.length; i++)
+		            for (int i = 0; i < filetext.length; i++)
 		            {
-		                bw.write(content[i]);
+		                bw.write(filetext[i]);
 		                bw.newLine();
 		            }
 		            
