@@ -261,7 +261,7 @@ public class ServerThread extends Thread
         }
         log(user,filename,"Write","File Updated Successfully");
         //call replica
-        replicate("write",user,filename,content);
+        replicate("write",user,fileName,content);
         return "File Updated Successfully";
     }
 
