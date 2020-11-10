@@ -46,7 +46,7 @@ public class ServerThread extends Thread
         try {  
             // Getting the registry 
             ArrayList<String> replicaIP = readServers();
-           
+            boolean success
             int port = 50000;
             // Looking up the registry for the remote object 
              for(int i = 0; i < replicaIP.size(); i++) {
@@ -55,11 +55,30 @@ public class ServerThread extends Thread
                 ServerReplicaServerInterface replica = (ServerReplicaServerInterface) registry.lookup("Replica"); 
            
                 // Calling the remote method using the obtained object 
-               boolean success = replica.updateFile(user, filename, content); 
-               if(success = false) {
+                if (operation == "write")
+                {
+                    success = replica.updateFile(user, filename, content);
+                }
+                else if (operation == "read")
+                {
+                    //call read here
+                }
+                else if (operation == "create")
+                {
+                    //call create here
+                }
+                else if (operation == "delete")
+                {
+                    //call delete here
+                }
+                else if (operation == "restore")
+                {
+                    //call restore here
+                }
+                if(success = false) {
                    System.out.println("write err happens at" + " replica" + i);
-               }
-               System.out.println("write success at" + " replica" + i);
+                }
+                System.out.println("write success at" + " replica" + i);
             }
             
             // System.out.println("Remote method invoked"); 
