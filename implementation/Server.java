@@ -7,7 +7,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
-public class Server
+public class Server extends Replica
 {
 	static Registry registry ;
 	//This function will start the server at a port number
