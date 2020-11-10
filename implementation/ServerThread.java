@@ -41,6 +41,33 @@ public class ServerThread extends Thread
 
     }
 
+    public static void replicate(String operation,String user,String filename,String content)
+    {
+        try {  
+            // Getting the registry 
+            ArrayList<String> replicaIP = readServers();
+           
+       
+            // Looking up the registry for the remote object 
+             for(int i = 0; i < replicaIP.size(); i++) {
+                System.setProperty("java.rmi.server.hostname", replicaIP.get(i));
+                Registry registry = LocateRegistry.getRegistry(replicaIP.get(i), port); 
+                ServerReplicaServerInterface replica = (ServerReplicaServerInterface) registry.lookup("Replica"); 
+           
+                // Calling the remote method using the obtained object 
+               boolean success = replica.updateFile(user, fileName, content); 
+               if(success = false) {
+                   System.out.println("write err happens at" + " replica" + i);
+               }
+               System.out.println("write success at" + " replica" + i);
+            }
+            
+            // System.out.println("Remote method invoked"); 
+         } catch (Exception e) {
+            System.err.println("Client exception: " + e.toString()); 
+            e.printStackTrace(); 
+         } 
+    }
     // Function to Create File
     private String create(String user, String filename, String content) throws IOException
     {
@@ -207,7 +234,7 @@ public class ServerThread extends Thread
         String directoryName = PATH.concat("/"+user);
         String fileName = filename + ".txt";
         String[] filetext = content.split("\\$\\%\\^");
-	int port = 50000;
+	
 
         //Creating File
         File file = new File(directoryName + "/" + fileName);
@@ -215,7 +242,7 @@ public class ServerThread extends Thread
         if ( !(lease.isAlive()))
             return "Lease Period Over. Please Request for Update Again";
         try{
-            System.out.println(file.getAbsoluteFile());
+            
             FileWriter fw = new FileWriter(file.getAbsoluteFile());
             BufferedWriter bw = new BufferedWriter(fw);
             for (int i = 0; i < filetext.length; i++)
@@ -234,30 +261,7 @@ public class ServerThread extends Thread
         }
         log(user,filename,"Write","File Updated Successfully");
         //call replica
-        try {  
-	         // Getting the registry 
-	    	 ArrayList<String> replicaIP = readServers();
-	        
-	    
-	         // Looking up the registry for the remote object 
-	          for(int i = 0; i < replicaIP.size(); i++) {
-	        	 System.setProperty("java.rmi.server.hostname", replicaIP.get(i));
-	        	 Registry registry = LocateRegistry.getRegistry(replicaIP.get(i), port); 
-		         ServerReplicaServerInterface replica = (ServerReplicaServerInterface) registry.lookup("Replica"); 
-		    
-		         // Calling the remote method using the obtained object 
-		        boolean success = replica.updateFile(user, fileName, content); 
-		        if(success = false) {
-		        	System.out.println("write err happens at" + " replica" + i);
-		        }
-		        System.out.println("write success at" + " replica" + i);
-	         }
-	         
-	         // System.out.println("Remote method invoked"); 
-	      } catch (Exception e) {
-	         System.err.println("Client exception: " + e.toString()); 
-	         e.printStackTrace(); 
-	      } 
+        replicate("write",user,filename,content);
         return "File Updated Successfully";
     }
 
