@@ -59,21 +59,21 @@ public class ServerThread extends Thread
                 {
                     success = replica.updateFile(user, filename, content);
                 }
-                else if (operation == "read")
+                else if (operation == "append")
                 {
-                    //call read here
+                    success = replica.appendFile(user, filename, content);
                 }
                 else if (operation == "create")
                 {
-                    //call create here
+                    success = replica.createFile(user, filename, content);
                 }
                 else if (operation == "delete")
                 {
-                    //call delete here
+                    success = replica.deleteFile(user, filename, content);
                 }
                 else if (operation == "restore")
                 {
-                    //call restore here
+                    success = replica.restoreFile(user, filename, content);
                 }
                 if(success = false) {
                    System.out.println("write err happens at" + " replica" + i);
