@@ -47,7 +47,7 @@ public class ServerThread extends Thread
             // Getting the registry 
             ArrayList<String> replicaIP = readServers();
            
-       
+            int port = 9000;
             // Looking up the registry for the remote object 
              for(int i = 0; i < replicaIP.size(); i++) {
                 System.setProperty("java.rmi.server.hostname", replicaIP.get(i));
@@ -55,7 +55,7 @@ public class ServerThread extends Thread
                 ServerReplicaServerInterface replica = (ServerReplicaServerInterface) registry.lookup("Replica"); 
            
                 // Calling the remote method using the obtained object 
-               boolean success = replica.updateFile(user, fileName, content); 
+               boolean success = replica.updateFile(user, filename, content); 
                if(success = false) {
                    System.out.println("write err happens at" + " replica" + i);
                }
