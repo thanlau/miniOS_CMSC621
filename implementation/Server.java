@@ -50,6 +50,13 @@ public class Server extends Replica
 			e.printStackTrace();
 		}
     }
+    public static String findip() throws UnknownHostException
+    {
+        InetAddress inetAddress = InetAddress.getLocalHost();
+        //System.out.println("IP Address:- " + inetAddress.getHostAddress());
+        //System.out.println("Host Name:- " + inetAddress.getHostName());
+        return inetAddress.getHostAddress();
+    }
     
     public static void StartReplica() throws IOException {
 		String replicaName = "";
@@ -57,9 +64,10 @@ public class Server extends Replica
 		int port = 50000;
 		try { 
 	         // Instantiating the implementation class 
-			for(int i = 0; i < replicaIP.size(); i++) {
+			//for(int i = 0; i < replicaIP.size(); i++) {
 //		        System.setProperty("java.rmi.server.hostname", replicaIP.get(i));
-				LocateRegistry.createRegistry(port + i);
+                System.setProperty("java.rmi.server.hostname", findip());
+                LocateRegistry.createRegistry(port + i);
 	        	registry = LocateRegistry.getRegistry(port+i);
 
 				ServerReplicaServerInterface replica = new Replica(); 
@@ -71,7 +79,7 @@ public class Server extends Replica
 //				 Registry registry = LocateRegistry.createRegistry(port+i); 
 		        registry.rebind("Replica"+i, stub);  
 		        System.out.println("register Replica:" + i);
-			}
+			//}
 	         System.err.println("Server ready"); 
 	      } catch (Exception e) { 
 	         System.err.println("Server exception: " + e.toString()); 
