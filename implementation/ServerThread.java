@@ -123,7 +123,7 @@ public class ServerThread extends Thread
             e.printStackTrace();
         }
         log(user,filename,"Create","File Created Successfully");
-        replicate("create",user,filename,content);
+        replicate("create",user,fileName,content);
         return "File Created Successfully";
     }
 
