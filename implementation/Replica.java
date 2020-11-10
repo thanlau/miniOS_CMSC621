@@ -17,7 +17,7 @@ public class Replica implements ServerReplicaServerInterface{
 		// TODO Auto-generated method stub
 				System.out.println("Hello from Update Replica");
 				String directoryName = PATH.concat("/"+user);
-		        String fileName = filename + ".txt";
+		        String fileName = filename;
 		        String[] filetext = content.split("\\$\\%\\^");
 
 		        //Creating File
