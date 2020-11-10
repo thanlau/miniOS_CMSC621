@@ -18,14 +18,14 @@ public class Replica implements ServerReplicaServerInterface{
 		String fileName = filename+".lck";
 		File file = new File(directoryName + "/" + fileName);
 		file.createNewFile();
-        lock = true;
+
             //Create a timer thread of 10 mins (Lease Period)
         lease = new Lease(user,filename);
         lease.start();
 		return true;
 	}
 
-	@Override
+	
 	public boolean unlockFile(String user, String filename) throws RemoteException,IOException
 	{
 		String directoryName = PATH.concat("/"+user);
@@ -33,7 +33,7 @@ public class Replica implements ServerReplicaServerInterface{
 		File file = new File(directoryName + "/" + fileName);
 		file.delete();
 		lease.shutdown();
-		return True;
+		return true;
 	}
 
 	@Override
