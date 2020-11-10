@@ -71,6 +71,10 @@ public class ServerThread extends Thread
                 {
                     success = replica.deleteFile(user, filename);
                 }
+                else if (operation == "lockfile")
+                {
+                    success = replica.lockFile(user, filename);
+                }
                 else if (operation == "restore")
                 {
                     success = replica.restoreFile(user, filename);
@@ -283,7 +287,7 @@ public class ServerThread extends Thread
         }
         log(user,filename,"Write","File Updated Successfully");
         //call replica
-        replicate("write",user,fileName,content);
+        replicate("write",user,filename,content);
         return "File Updated Successfully";
     }
 
@@ -304,7 +308,7 @@ public class ServerThread extends Thread
                 {
                     return "Locked";
                 }
-
+                replicate("lockfile",user,filename,"");
                 BufferedReader br = new BufferedReader(new FileReader(file));
                 String text;
                 String content = "";

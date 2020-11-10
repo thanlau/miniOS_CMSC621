@@ -11,13 +11,37 @@ public class Replica implements ServerReplicaServerInterface{
 	private static String PATH = "..//Directory";
 	public static Lease lease;
 	
+	@Override
+	public boolean lockFile(String user, String filename) throws RemoteException,IOException
+	{
+		String directoryName = PATH.concat("/"+user);
+		String fileName = filename+".lck";
+		File file = new File(directoryName + "/" + fileName);
+		file.createNewFile();
+        lock = true;
+            //Create a timer thread of 10 mins (Lease Period)
+        lease = new Lease(user,filename);
+        lease.start();
+		return true;
+	}
+
+	@Override
+	public boolean unlockFile(String user, String filename) throws RemoteException,IOException
+	{
+		String directoryName = PATH.concat("/"+user);
+		String fileName = filename+".lck";
+		File file = new File(directoryName + "/" + fileName);
+		file.delete();
+		lease.shutdown();
+		return True;
+	}
 
 	@Override
 	public boolean updateFile(String user, String filename, String content) throws RemoteException, IOException {
 		// TODO Auto-generated method stub
 				System.out.println("Hello from Update Replica");
 				String directoryName = PATH.concat("/"+user);
-		        String fileName = filename;
+		        String fileName = filename+".txt";
 		        String[] filetext = content.split("\\$\\%\\^");
 
 		        //Creating File
@@ -41,7 +65,7 @@ public class Replica implements ServerReplicaServerInterface{
 		            
 		            bw.close();
 		            //unlock the file after write
-		            //unlock(user, filename);
+		            unlockFile(user, filename);
 		        }
 		        catch (IOException e)
 		        {

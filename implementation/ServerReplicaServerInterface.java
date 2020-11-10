@@ -12,13 +12,15 @@ public interface ServerReplicaServerInterface extends Remote{
 	
  public boolean updateFile(String user, String filename, String content) throws RemoteException, IOException;
  
- public boolean createFile(String user, String filename, String content) throws IOException;
+ public boolean createFile(String user, String filename, String content) throws RemoteException,IOException;
  
- public boolean deleteFile(String user, String filename) throws IOException;
+ public boolean deleteFile(String user, String filename) throws RemoteException,IOException;
  
- public boolean restoreFile(String user, String filename) throws IOException;
+ public boolean restoreFile(String user, String filename) throws RemoteException,IOException;
  
- public boolean appendFile(String user, String filename, String content) throws IOException;
+ public boolean appendFile(String user, String filename, String content) throws RemoteException,IOException;
+
+ public boolean lockFile(String user, String filename) throws RemoteException,IOException;
 
 
 }
