@@ -215,6 +215,7 @@ public class ServerThread extends Thread
         if ( !(lease.isAlive()))
             return "Lease Period Over. Please Request for Update Again";
         try{
+            System.out.println(file.getAbsoluteFile());
             FileWriter fw = new FileWriter(file.getAbsoluteFile());
             BufferedWriter bw = new BufferedWriter(fw);
             for (int i = 0; i < filetext.length; i++)
