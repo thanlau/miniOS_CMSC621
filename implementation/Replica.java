@@ -29,7 +29,8 @@ public class Replica implements ServerReplicaServerInterface{
 
 // 		        if ( !(lease.isAlive()))
 // 		            return false;
-
+				System.out.println(file.getAbsoluteFile());
+				System.out.println(content);
 		        try{
 		            FileWriter fw = new FileWriter(file.getAbsoluteFile());
 		            BufferedWriter bw = new BufferedWriter(fw);
