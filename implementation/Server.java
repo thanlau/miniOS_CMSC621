@@ -67,8 +67,8 @@ public class Server extends Replica
 			//for(int i = 0; i < replicaIP.size(); i++) {
 //		        System.setProperty("java.rmi.server.hostname", replicaIP.get(i));
                 System.setProperty("java.rmi.server.hostname", findip());
-                LocateRegistry.createRegistry(port + i);
-	        	registry = LocateRegistry.getRegistry(port+i);
+                LocateRegistry.createRegistry(port);
+	        	registry = LocateRegistry.getRegistry(port);
 
 				ServerReplicaServerInterface replica = new Replica(); 
 		    
@@ -77,8 +77,8 @@ public class Server extends Replica
 				ServerReplicaServerInterface stub = (ServerReplicaServerInterface) UnicastRemoteObject.exportObject(replica,0);  		         
 		         // Binding the remote object (stub) in the registry 	
 //				 Registry registry = LocateRegistry.createRegistry(port+i); 
-		        registry.rebind("Replica"+i, stub);  
-		        System.out.println("register Replica:" + i);
+		        registry.rebind("Replica", stub);  
+		        System.out.println("register Replica:" );
 			//}
 	         System.err.println("Server ready"); 
 	      } catch (Exception e) { 
