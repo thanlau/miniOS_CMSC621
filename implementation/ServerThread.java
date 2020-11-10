@@ -46,7 +46,7 @@ public class ServerThread extends Thread
         try {  
             // Getting the registry 
             ArrayList<String> replicaIP = readServers();
-            boolean success
+            boolean success;
             int port = 50000;
             // Looking up the registry for the remote object 
              for(int i = 0; i < replicaIP.size(); i++) {
