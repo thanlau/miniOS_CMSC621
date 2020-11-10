@@ -437,7 +437,7 @@ public class ServerThread extends Thread
 
     public static ArrayList<String> readServers() throws IOException
     {
-        String PATH = "serverslist.txt";
+        String PATH = "AvailableServers.txt";
         File file = new File(PATH);
         BufferedReader br = new BufferedReader(new FileReader(file));
         ArrayList<String> ip = new ArrayList<String>();
