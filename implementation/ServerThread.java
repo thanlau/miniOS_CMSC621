@@ -69,11 +69,11 @@ public class ServerThread extends Thread
                 }
                 else if (operation == "delete")
                 {
-                    success = replica.deleteFile(user, filename, content);
+                    success = replica.deleteFile(user, filename);
                 }
                 else if (operation == "restore")
                 {
-                    success = replica.restoreFile(user, filename, content);
+                    success = replica.restoreFile(user, filename);
                 }
                 if(success = false) {
                    System.out.println("write err happens at" + " replica" + i);
@@ -123,6 +123,7 @@ public class ServerThread extends Thread
             e.printStackTrace();
         }
         log(user,filename,"Create","File Created Successfully");
+        replicate("create",fileName,user,content);
         return "File Created Successfully";
     }
 
@@ -178,6 +179,7 @@ public class ServerThread extends Thread
                 directory.mkdir();
             file.renameTo(new File(tempName + "/"+file.getName()));
             log(user,filename,"Delete","File Deleted Successfully");
+            replicate("delete",user,fileName,"");
             return "File Deleted Successfully";
         }
         else
@@ -198,6 +200,7 @@ public class ServerThread extends Thread
         {
             file.renameTo(new File(directoryName + "/" + fileName));
             log(user,filename,"Restore","File Restored");
+            replicate("restore",user,fileName,"");
             return "File Restored";
         }
         else
