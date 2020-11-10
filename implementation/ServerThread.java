@@ -47,7 +47,7 @@ public class ServerThread extends Thread
             // Getting the registry 
             ArrayList<String> replicaIP = readServers();
            
-            int port = 9000;
+            int port = 50000;
             // Looking up the registry for the remote object 
              for(int i = 0; i < replicaIP.size(); i++) {
                 System.setProperty("java.rmi.server.hostname", replicaIP.get(i));
