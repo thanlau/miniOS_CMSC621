@@ -45,11 +45,13 @@ public class HeartBeat extends Thread
         //System.out.println("Sending Ping Request to " + ipAddress);
         
         if (system.isReachable(5000))
-        {
+        { 
+            System.out.println("IP reachable  "+ipAddress);
             return true;
         }
         else
         {
+            System.out.println("IP not reachable  "+ipAddress);
             return false;
         }
     }
@@ -68,6 +70,7 @@ public class HeartBeat extends Thread
         {
             try
             {
+                System.out.println("Inside Hearbeat  ");
                 ArrayList<String> ip = readServers();
                 ArrayList<String> available = new ArrayList<String>();
                 for (int i = 0; i < ip.size(); i++)

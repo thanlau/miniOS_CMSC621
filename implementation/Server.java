@@ -22,7 +22,7 @@ public class Server extends Replica
                 Socket socket = serverSocket.accept();
                 System.out.println("New client connected");
                 System.out.println(socket.getInetAddress());
-
+                new HeartBeat().start();
                 // Creating a new thread for each Client connected
                 new ServerThread(socket).start();
             }
