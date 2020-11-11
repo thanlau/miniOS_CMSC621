@@ -46,12 +46,12 @@ public class HeartBeat extends Thread
         
         if (system.isReachable(5000))
         { 
-            System.out.println("IP reachable  "+ipAddress);
+            //System.out.println("IP reachable  "+ipAddress);
             return true;
         }
         else
         {
-            System.out.println("IP not reachable  "+ipAddress);
+            //System.out.println("IP not reachable  "+ipAddress);
             return false;
         }
     }
