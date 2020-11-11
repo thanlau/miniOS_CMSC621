@@ -16,13 +16,14 @@ public class Server extends Replica
         try (ServerSocket serverSocket = new ServerSocket(port))
         {
             System.out.println("Server is listening on port " + port);
+            new HeartBeat().start();
             while (true)
             {
                 //Accept connection from Client
                 Socket socket = serverSocket.accept();
                 System.out.println("New client connected");
                 System.out.println(socket.getInetAddress());
-                new HeartBeat().start();
+                
                 // Creating a new thread for each Client connected
                 new ServerThread(socket).start();
             }
