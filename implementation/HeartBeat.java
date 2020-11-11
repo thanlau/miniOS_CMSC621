@@ -70,7 +70,7 @@ public class HeartBeat extends Thread
         {
             try
             {
-                System.out.println("Inside Hearbeat  ");
+                //System.out.println("Inside Hearbeat  ");
                 ArrayList<String> ip = readServers();
                 ArrayList<String> available = new ArrayList<String>();
                 for (int i = 0; i < ip.size(); i++)
