@@ -57,7 +57,7 @@ public class Lease extends Thread
         {
         try
             {
-                Thread.sleep(30000);
+                Thread.sleep(60000);
                 if (blinker != lease)
                     break;
                 System.out.println("Timer Working");

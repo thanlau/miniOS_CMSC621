@@ -148,6 +148,13 @@ public class Client
                         writeFlag = false;
                         continue;
                     }
+                    if (server_output.equals("File Not Present"))
+                    {
+                        System.out.println("File Not Present");
+                        writeFlag = false;
+                        continue;
+                    }
+                    
                     if (text.charAt(0)=='9' || text.charAt(0)=='2')
                     {
                         this.read_output(server_output);
