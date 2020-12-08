@@ -250,7 +250,7 @@ public class ServerThread extends Thread
 	        {
 	            e.printStackTrace();
 	        }
-
+        replicate("append",user,fileName,content);
         return "File Wrote Successfully";
     }
 
